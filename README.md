@@ -12,7 +12,7 @@ Spring Boot REST API that imports country data from the Oorsprong SOAP service, 
 
 That guide covers:
 
-1. Prerequisites (Java, Maven, XAMPP)
+1. Prerequisites (Java, Maven, XAMPP/WampServer)
 2. Starting MySQL and creating the `countryinfo` database
 3. Building and running the application
 4. Health check verification
