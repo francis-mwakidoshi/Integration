@@ -98,7 +98,7 @@ Expected response:
 {"status":"UP"}
 ```
 
-If this fails, check that MySQL is running on port 3307 and credentials match `application.yml`. See [HELP.md](../HELP.md) and [KUBERNETES_TROUBLESHOOTING.md](KUBERNETES_TROUBLESHOOTING.md) for database connection issues.
+If this fails, check that MySQL is running on port 3307 and credentials match `application.yml`
 
 ---
 
