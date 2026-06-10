@@ -49,7 +49,7 @@ Defaults in `src/main/resources/application.yml`:
 | Password | `todaytest1123today` |
 | Server port | `8080` |
 
-If your XAMPP password or port differs, update `application.yml` or set environment variables (see [HELP.md](../HELP.md)).
+If your XAMPP password or port differs, update `application.yml`
 
 ### Step 4: Build the project
 
