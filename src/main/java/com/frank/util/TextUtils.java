@@ -5,10 +5,6 @@ public final class TextUtils {
     private TextUtils() {
     }
 
-    /**
-     * Converts input to sentence case: first character upper, remainder lower.
-     * Example: "kenya" -> "Kenya", "TANZANIA" -> "Tanzania"
-     */
     public static String toSentenceCase(String input) {
         if (input == null || input.isBlank()) {
             return input;

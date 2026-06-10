@@ -2,7 +2,6 @@ spring:
   application:
     name: country-info-service
   datasource:
-    # XAMPP default port is 3307 (see D:\xampp\mysql\bin\my.ini). Kubernetes/Docker use 3306 via DB_URL override.
     url: ${DB_URL:jdbc:mysql://127.0.0.1:3307/countryinfo?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:todaytest1123today}

@@ -3,7 +3,7 @@ package com.frank.exception;
 public class CountryNotFoundException extends RuntimeException {
 
     public CountryNotFoundException(Long id) {
-        super("Country not found with id: " + id);
+        super("Country not found with id : " + id);
     }
 
     public CountryNotFoundException(String message) {
