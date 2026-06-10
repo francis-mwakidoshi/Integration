@@ -36,7 +36,7 @@ mvn spring-boot:run
 curl http://localhost:8080/actuator/health
 ```
 
-Local database: `127.0.0.1:3307`, user `root`, password `todaytest1123today`. See [HELP.md](HELP.md) for details.
+Local database: `127.0.0.1:3307`, user `root`, password `todaytest1123today`.
 
 ---
 
