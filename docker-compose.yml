@@ -1,0 +1,21 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: country-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"   # Docker MySQL; XAMPP local dev uses host port 3307 instead (see HELP.md)
+    environment:
+      MYSQL_ROOT_PASSWORD: todaytest1123today
+      MYSQL_DATABASE: countryinfo
+    volumes:
+      - country-mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-ptodaytest1123today"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  country-mysql-data:

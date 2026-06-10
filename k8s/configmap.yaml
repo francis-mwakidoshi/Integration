@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: country-info-config
+  namespace: country-info
+data:
+  SERVER_PORT: "8080"
+  DB_URL: "jdbc:mysql://mysql:3307/countryinfo?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+  DB_USERNAME: "countryuser"
+  DB_POOL_SIZE: "10"
+  SOAP_CONNECT_TIMEOUT_MS: "5000"
+  SOAP_READ_TIMEOUT_MS: "15000"

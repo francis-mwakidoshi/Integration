@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: country-info-service
+  namespace: country-info
+spec:
+  selector:
+    app: country-info-service
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+  type: LoadBalancer

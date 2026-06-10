@@ -1,0 +1,73 @@
+spring:
+  application:
+    name: country-info-service
+  datasource:
+    # XAMPP default port is 3307 (see D:\xampp\mysql\bin\my.ini). Kubernetes/Docker use 3306 via DB_URL override.
+    url: ${DB_URL:jdbc:mysql://127.0.0.1:3307/countryinfo?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:todaytest1123today}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: ${DB_POOL_SIZE:10}
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+  jpa:
+    open-in-view: false
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=500,expireAfterWrite=10m
+
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when_authorized
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId}] %logger{36} - %msg%n"
+  level:
+    com.frank: INFO
+    org.springframework.web: INFO
+
+soap:
+  country-info:
+    wsdl-url: http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso
+    namespace: http://www.oorsprong.org/websamples.countryinfo
+    connect-timeout-ms: ${SOAP_CONNECT_TIMEOUT_MS:5000}
+    read-timeout-ms: ${SOAP_READ_TIMEOUT_MS:15000}
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      countrySoapService:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 3
+  retry:
+    instances:
+      countrySoapService:
+        max-attempts: 3
+        wait-duration: 1s
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2

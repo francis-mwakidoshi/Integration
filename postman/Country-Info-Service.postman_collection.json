@@ -1,0 +1,228 @@
+{
+  "info": {
+    "_postman_id": "country-info-service-collection",
+    "name": "Country Info Service",
+    "description": "REST API for importing countries via SOAP and performing CRUD operations.\n\n**Setup:** Import `Country-Info-Service.postman_environment.json` and select the **Local** environment, or set `baseUrl` to `http://localhost:8080`.\n\n**Suggested test order:**\n1. Health Check\n2. Import Country\n3. Get All Countries (note the `id` from import)\n4. Get Country by ID\n5. Update Country\n6. Delete Country",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "countryId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Actuator",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["actuator", "health"]
+            },
+            "description": "Verify the application is running."
+          },
+          "response": []
+        },
+        {
+          "name": "Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/metrics",
+              "host": ["{{baseUrl}}"],
+              "path": ["actuator", "metrics"]
+            },
+            "description": "List available application metrics."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Countries",
+      "item": [
+        {
+          "name": "Import Country",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const json = pm.response.json();",
+                  "    if (json.id) {",
+                  "        pm.collectionVariables.set('countryId', json.id);",
+                  "        pm.environment.set('countryId', json.id);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Trace-Id",
+                "value": "postman-import-001",
+                "description": "Optional trace ID for log correlation"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Kenya\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/countries/import",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "countries", "import"]
+            },
+            "description": "Import a country by name. Calls the SOAP API, persists to MySQL, returns 201 Created.\n\nName is case-insensitive (e.g. \"kenya\" → \"Kenya\")."
+          },
+          "response": []
+        },
+        {
+          "name": "Import Country - Tanzania",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Tanzania\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/countries/import",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "countries", "import"]
+            },
+            "description": "Example import for Tanzania."
+          },
+          "response": []
+        },
+        {
+          "name": "Import Country - Validation Error",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/countries/import",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "countries", "import"]
+            },
+            "description": "Expect 400 Bad Request — empty country name."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Countries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/countries",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "countries"]
+            },
+            "description": "List all stored countries."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Country by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/countries/{{countryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "countries", "{{countryId}}"]
+            },
+            "description": "Get one country by database ID. Set `countryId` variable after import."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Country by ID - Not Found",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/countries/99999",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "countries", "99999"]
+            },
+            "description": "Expect 404 Not Found."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Country",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Kenya\",\n  \"capitalCity\": \"Nairobi\",\n  \"phoneCode\": \"254\",\n  \"continentCode\": \"AF\",\n  \"currencyCode\": \"KES\",\n  \"countryFlagUrl\": \"\",\n  \"languages\": [\"English\", \"Swahili\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/countries/{{countryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "countries", "{{countryId}}"]
+            },
+            "description": "Update a stored country. ISO code cannot be changed (set at import)."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Country",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/countries/{{countryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "countries", "{{countryId}}"]
+            },
+            "description": "Delete a country by ID. Expect 204 No Content."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
