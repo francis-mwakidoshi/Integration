@@ -151,11 +151,11 @@ Expected result: all tests pass
 
 ### Step 9: Test error handling
 
-| Test | Request | Expected |
-|------|---------|----------|
-| Validation error | `POST /import` with `{"name": ""}` | `400 Bad Request` |
-| Not found | `GET /api/v1/countries/99999` | `404 Not Found` |
-| Duplicate import | Import the same country twice | `409 Conflict` on second import |
-| SOAP unavailable | Import with no internet | `502 Bad Gateway` |
+| Test | Request | Expected                         |
+|------|---------|----------------------------------|
+| Validation error | `POST /import` with `{"name": ""}` | `400 Bad Request`                |
+| Not found | `GET /api/v1/countries/99999` | `404 Not Found`                  |
+| Duplicate import | Import the same country twice | `409 Conflict` on second import. |
+| SOAP unavailable | Import with no internet | `502 Bad Gateway`                |
 
 Use the **Import Country - Validation Error** request in the Postman collection for the 400 case.
